@@ -27,6 +27,12 @@ SOFTWARE.
 ************************************************************************************ */
 "use strict";
 
+const _toString = Object.prototype.toString
+/** Converts to a string using `Object.prototype.toString`. */
+function toString(data: unknown): string {
+  return _toString.call(data)
+}
+
 /* Validation functions copied from check-types package - https://www.npmjs.com/package/check-types */
 export function isFunction(data: unknown): data is (...args: unknown[]) => unknown {
   return typeof data === 'function';
@@ -49,7 +55,7 @@ export function isString(data: unknown): data is string {
 }
 
 export function isObject(data: unknown): data is object {
-  return toString.call(data) === '[object Object]';
+  return toString(data) === '[object Object]';
 }
 
 export function isInstanceStrict<T extends Function>(data: unknown, Constructor: T): data is T['prototype'] {

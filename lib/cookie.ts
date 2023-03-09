@@ -39,6 +39,7 @@ import * as validators from './validators'
 import VERSION from './version'
 import {permuteDomain} from "./permuteDomain"
 import {getCustomInspectSymbol} from './utilHelper'
+import type { Callback, ErrorCallback } from "./types";
 
 // From RFC6265 S4.1.1
 // note that it excludes \x3B ";"
@@ -2048,6 +2049,3 @@ export interface SerializedCookie {
   value?: string;
   [key: string]: any;
 }
-
-export type Callback<T> = (error: Error | undefined, result: T | undefined) => void
-export type ErrorCallback = (error: Error) => void

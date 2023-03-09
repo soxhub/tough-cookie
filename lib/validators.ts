@@ -27,6 +27,8 @@ SOFTWARE.
 ************************************************************************************ */
 "use strict";
 
+import type { ErrorCallback } from "./types";
+
 const _toString = Object.prototype.toString
 /** Converts to a string using `Object.prototype.toString`. */
 function toString(data: unknown): string {
@@ -71,9 +73,9 @@ export function isInteger(data: unknown): data is number {
 }
 /* End validation functions */
 
-export function validate(bool: boolean, callback?: (err: Error) => void, message?: string): void;
+export function validate(bool: boolean, callback?: ErrorCallback, message?: string): void;
 export function validate(bool: boolean, message?: string): void;
-export function validate(bool: boolean, cbOrMessage?: string | ((err: Error) => void), message?: string): void {
+export function validate(bool: boolean, cbOrMessage?: ErrorCallback | string, message?: string): void {
   const cb = isFunction(cbOrMessage) && cbOrMessage
   if (!message) message = isNonEmptyString(cbOrMessage) ? cbOrMessage : 'Failed Check'
   if (bool) return

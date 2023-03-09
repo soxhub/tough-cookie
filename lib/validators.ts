@@ -40,7 +40,8 @@ export function isFunction(data: unknown): data is Function {
   return typeof data === 'function';
 }
 
-export function isNonEmptyString(data: unknown): data is string {
+// This isn't a type guard because there's no simple way to differentiate empty vs non-empty string
+export function isNonEmptyString(data: unknown): boolean {
   return isString(data) && data !== '';
 }
 
@@ -77,7 +78,8 @@ export function validate(bool: boolean, callback?: ErrorCallback, message?: stri
 export function validate(bool: boolean, message?: string): void;
 export function validate(bool: boolean, cbOrMessage?: ErrorCallback | string, message?: string): void {
   const cb = isFunction(cbOrMessage) && cbOrMessage
-  if (!message) message = isNonEmptyString(cbOrMessage) ? cbOrMessage : 'Failed Check'
+  // We use `isString` here because it is a type guard, while `isNonEmptyString` is not.
+  if (!message) message = isString(cbOrMessage) && !isEmptyString(cbOrMessage) ? cbOrMessage : 'Failed Check'
   if (bool) return
   const err = new ParameterError(message)
   if (cb) cb(err)

@@ -34,7 +34,7 @@ function toString(data: unknown): string {
 }
 
 /* Validation functions copied from check-types package - https://www.npmjs.com/package/check-types */
-export function isFunction(data: unknown): data is (...args: unknown[]) => unknown {
+export function isFunction(data: unknown): data is Function {
   return typeof data === 'function';
 }
 
@@ -71,26 +71,16 @@ export function isInteger(data: unknown): data is number {
 }
 /* End validation functions */
 
-export function validate(bool: boolean, cb?: any, options?: any): void {
-  if (!isFunction(cb)) {
-    options = cb;
-    cb = null;
-  }
-  if (!isObject(options)) options = { Error: "Failed Check" };
-  if (!bool) {
-    if (cb) {
-      cb(new ParameterError(options));
-    } else {
-      throw new ParameterError(options);
-    }
-  }
+export function validate(bool: boolean, callback?: (err: Error) => void, message?: string): void;
+export function validate(bool: boolean, message?: string): void;
+export function validate(bool: boolean, cbOrMessage?: string | ((err: Error) => void), message?: string): void {
+  const cb = isFunction(cbOrMessage) && cbOrMessage
+  if (!message) message = isNonEmptyString(cbOrMessage) ? cbOrMessage : 'Failed Check'
+  if (bool) return
+  const err = new ParameterError(message)
+  if (cb) cb(err)
+  else throw err
+  
 }
 
-export class ParameterError extends Error {
-  constructor(...params: any[]) {
-    super(...params);
-    if (Object.setPrototypeOf) {
-      Object.setPrototypeOf(this, ParameterError.prototype);
-    }
-  }
-}
+export class ParameterError extends Error {}

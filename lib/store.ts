@@ -31,7 +31,8 @@
 "use strict";
 /*jshint unused:false */
 
-import type {Callback, Cookie} from "./cookie";
+import type {Cookie} from "./cookie";
+import type {Callback} from "./types";
 
 export class Store {
   synchronous: boolean;

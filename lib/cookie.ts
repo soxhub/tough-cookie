@@ -2000,23 +2000,25 @@ export class CookieJar {
 const getPublicSuffix = pubsuffix.getPublicSuffix
 const ParameterError = validators.ParameterError
 
-export { VERSION as version }
-export { Store as Store }
-export { MemoryCookieStore as MemoryCookieStore }
-export { parseDate as parseDate }
-export { formatDate as formatDate }
-export { parse as parse }
-export { fromJSON as fromJSON }
-export { domainMatch as domainMatch }
-export { defaultPath as defaultPath }
-export { pathMatch as pathMatch }
-export { getPublicSuffix as getPublicSuffix }
-export { cookieCompare as cookieCompare }
-export { permuteDomain as permuteDomain }
-export { permutePath as permutePath }
-export { canonicalDomain as canonicalDomain }
-export { PrefixSecurityEnum as PrefixSecurityEnum }
-export { ParameterError as ParameterError }
+export {
+  VERSION as version,
+  Store,
+  MemoryCookieStore,
+  parseDate,
+  formatDate,
+  parse,
+  fromJSON,
+  domainMatch,
+  defaultPath,
+  pathMatch,
+  getPublicSuffix,
+  cookieCompare,
+  permuteDomain,
+  permutePath,
+  canonicalDomain,
+  PrefixSecurityEnum,
+  ParameterError
+}
 
 type SetCookieOptions = {
   loose?: boolean | undefined;

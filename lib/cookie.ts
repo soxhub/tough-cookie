@@ -39,7 +39,7 @@ import * as validators from './validators'
 import VERSION from './version'
 import {permuteDomain} from "./permuteDomain"
 import {getCustomInspectSymbol} from './utilHelper'
-import type { Callback, ErrorCallback } from "./utils";
+import { Callback, ErrorCallback, toString } from "./utils";
 
 // From RFC6265 S4.1.1
 // note that it excludes \x3B ";"
@@ -339,7 +339,7 @@ function parseDate(str: string | undefined | null): Date | undefined {
 }
 
 function formatDate(date: Date) {
-  validators.validate(validators.isDate(date), date);
+  validators.validate(validators.isDate(date), toString(date));
   return date.toUTCString();
 }
 
@@ -674,7 +674,7 @@ function parse(str: string, options: any = {}): Cookie | undefined | null {
  * @returns boolean
  */
 function isSecurePrefixConditionMet(cookie: Cookie) {
-  validators.validate(validators.isObject(cookie), cookie);
+  validators.validate(validators.isObject(cookie), toString(cookie));
   const startsWithSecurePrefix = typeof cookie.key === 'string' && cookie.key.startsWith("__Secure-")
   return !startsWithSecurePrefix || cookie.secure
 }
@@ -762,8 +762,8 @@ function fromJSON(str: string | SerializedCookie | null | undefined) {
  */
 
 function cookieCompare(a: Cookie, b: Cookie) {
-  validators.validate(validators.isObject(a), a);
-  validators.validate(validators.isObject(b), b);
+  validators.validate(validators.isObject(a), toString(a));
+  validators.validate(validators.isObject(b), toString(b));
   let cmp = 0;
 
   // descending for length: b CMP a
@@ -1289,12 +1289,7 @@ export class CookieJar {
 
     validators.validate(validators.isFunction(cb), cb);
 
-    if (
-      !validators.isNonEmptyString(cookie) &&
-      !validators.isObject(cookie) &&
-      cookie instanceof String &&
-      cookie.length == 0
-    ) {
+    if (validators.isEmptyString(cookie)) {
       return cb(null);
     }
 

@@ -1247,15 +1247,15 @@ export class CookieJar {
     this.prefixSecurity = getNormalizedPrefixSecurity(options.prefixSecurity);
   }
 
-  private callSync<T>(fn: Function): T | undefined {
+  private callSync<T>(fn: (cb: Callback<T>) => void): T | undefined {
     if (!this.store.synchronous) {
       throw new Error(
         "CookieJar store is not synchronous; use async API instead."
       );
     }
-    let syncErr: Error | undefined;
-    let syncResult: T | undefined = undefined;
-    fn.call(this, (error: Error, result: T) => {
+    let syncErr: Error | null | undefined;
+    let syncResult: T | undefined;
+    fn.call(this, (error, result) => {
       syncErr = error
       syncResult = result
     })
@@ -1498,7 +1498,7 @@ export class CookieJar {
   }
   setCookieSync(cookie: string | Cookie, url: string, options?: SetCookieOptions): Cookie | undefined {
     const setCookieFn = () => this.setCookie(cookie, url, options)
-    return this.callSync<Cookie>(setCookieFn)
+    return this.callSync(setCookieFn)
   }
 
   // RFC6365 S5.4
@@ -1649,7 +1649,7 @@ export class CookieJar {
     return promiseCallback.promise
   }
   getCookiesSync(url: string, options: any = {}): Cookie[] {
-    return this.callSync<Cookie[]>(this.getCookies.bind(this, url, options)) ?? []
+    return this.callSync(this.getCookies.bind(this, url, options)) ?? []
   }
 
   getCookieString(url: string, options: any, callback: (error: Error, result: string) => void): void;
@@ -1678,7 +1678,7 @@ export class CookieJar {
     return promiseCallback.promise
   }
   getCookieStringSync(url: string, options: any = {}): string {
-    return this.callSync<string>(this.getCookieString.bind(this, url, options)) ?? ""
+    return this.callSync(this.getCookieString.bind(this, url, options)) ?? ""
   }
 
   getSetCookieStrings (url: string, callback: Callback<string[]>): void
@@ -1706,7 +1706,7 @@ export class CookieJar {
     return promiseCallback.promise
   }
   getSetCookieStringsSync(url: string, options: any = {}): string[] {
-    return this.callSync<string[]>(this.getSetCookieStrings.bind(this, url, options)) ?? []
+    return this.callSync(this.getSetCookieStrings.bind(this, url, options)) ?? []
   }
 
   serialize(callback: Callback<SerializedCookieJar>): void;
@@ -1780,7 +1780,7 @@ export class CookieJar {
     return promiseCallback.promise
   }
   serializeSync(): SerializedCookieJar | undefined {
-    return this.callSync<SerializedCookieJar>(this.serialize.bind(this))
+    return this.callSync(this.serialize.bind(this))
   }
 
   toJSON() {
@@ -1930,7 +1930,7 @@ export class CookieJar {
     return promiseCallback.promise
   }
   removeAllCookiesSync(): void {
-    return this.callSync<void>(this.removeAllCookies.bind(this))
+    return this.callSync(this.removeAllCookies.bind(this))
   }
 
   static deserialize(strOrObj: string | object, callback: Callback<CookieJar>): void;

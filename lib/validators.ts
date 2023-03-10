@@ -27,14 +27,7 @@ SOFTWARE.
 ************************************************************************************ */
 "use strict";
 
-import type { ErrorCallback } from "./utils";
-
-const _toString = Object.prototype.toString
-/** Converts to a string using `Object.prototype.toString`. */
-function toString(data: unknown): string {
-  return _toString.call(data)
-}
-
+import { ErrorCallback, toString } from "./utils";
 /* Validation functions copied from check-types package - https://www.npmjs.com/package/check-types */
 export function isFunction(data: unknown): data is Function {
   return typeof data === 'function';

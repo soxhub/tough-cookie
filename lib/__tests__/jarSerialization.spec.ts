@@ -180,7 +180,7 @@ describe('cookieJar serialization', () => {
 
       // corner cases
       const cornerCases = [
-        { expires: "Infinity", key: "infExp", value: "infExp" },
+        { expires: "Infinity" as const, key: "infExp", value: "infExp" },
         { maxAge: 3600, key: "max", value: "max" },
         {
           expires,

@@ -1266,10 +1266,9 @@ export class CookieJar {
     return syncResult;
   }
 
+  setCookie(cookie: string | Cookie, url: string, options?: SetCookieOptions): Promise<Cookie>;
   setCookie(cookie: string | Cookie, url: string, callback: Callback<Cookie>): void;
   setCookie(cookie: string | Cookie, url: string, options: SetCookieOptions, callback: Callback<Cookie>): void;
-  setCookie(cookie: string | Cookie, url: string): Promise<Cookie>
-  setCookie(cookie: string | Cookie, url: string, options: SetCookieOptions): Promise<Cookie>
   setCookie(cookie: string | Cookie, url: string, options: SetCookieOptions | Callback<Cookie>, callback?: Callback<Cookie>): unknown;
   setCookie(cookie: string | Cookie, url: string, options?: SetCookieOptions | Callback<Cookie>, callback?: Callback<Cookie>): unknown {
     const promiseCallback = createPromiseCallback<Cookie>(arguments)
@@ -1498,7 +1497,7 @@ export class CookieJar {
     return promiseCallback.promise
   }
   setCookieSync(cookie: string | Cookie, url: string, options?: SetCookieOptions): Cookie | undefined {
-    const setCookieFn = this.setCookie.bind(this, cookie, url, options as SetCookieOptions)
+    const setCookieFn = () => this.setCookie(cookie, url, options)
     return this.callSync<Cookie>(setCookieFn)
   }
 

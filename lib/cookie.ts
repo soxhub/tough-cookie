@@ -860,7 +860,7 @@ export class Cookie {
   lastAccessed: Date | 'Infinity' | null | undefined;
   sameSite: string | undefined;
 
-  constructor(options: {creation?: Cookie['creation']} = {}) {
+  constructor(options: Partial<Pick<Cookie, keyof typeof cookieDefaults>> = {}) {
     const customInspectSymbol = getCustomInspectSymbol();
     if (customInspectSymbol) {
       // @ts-ignore
@@ -1232,12 +1232,12 @@ export class CookieJar {
   private readonly allowSpecialUseDomain: boolean;
   readonly prefixSecurity: string;
 
-  constructor(store?: Store, options: CookieJarOptions = { rejectPublicSuffixes: true }) {
+  constructor(store?: Store | null, options: CookieJarOptions = { rejectPublicSuffixes: true }) {
     if (typeof options === "boolean") {
       options = { rejectPublicSuffixes: options };
     }
     validators.validate(validators.isObject(options), toString(options));
-    this.rejectPublicSuffixes = options.rejectPublicSuffixes;
+    this.rejectPublicSuffixes = !!options.rejectPublicSuffixes;
     this.enableLooseMode = !!options.looseMode;
     this.allowSpecialUseDomain =
       typeof options.allowSpecialUseDomain === "boolean"
@@ -2019,7 +2019,7 @@ export {
 
 
 type CookieJarOptions = {
-  rejectPublicSuffixes: boolean
+  rejectPublicSuffixes?: boolean
   looseMode?: boolean
   allowSpecialUseDomain?: boolean
   prefixSecurity?: string
@@ -2027,7 +2027,7 @@ type CookieJarOptions = {
 
 type GetCookiesOptions = {
   secure?: boolean;
-  sameSiteContext?: 'strict' | 'lax' | 'none';
+  sameSiteContext?: 'strict' | 'lax' | 'none' | undefined;
   http?: boolean;
   now?: Date;
   allPaths?: boolean;

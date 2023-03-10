@@ -79,7 +79,8 @@ export function validate(bool: boolean, message?: string): void;
 export function validate(bool: boolean, cbOrMessage?: ErrorCallback | string, message?: string): void {
   const cb = isFunction(cbOrMessage) && cbOrMessage
   // We use `isString` here because it is a type guard, while `isNonEmptyString` is not.
-  if (!message) message = isString(cbOrMessage) && !isEmptyString(cbOrMessage) ? cbOrMessage : 'Failed Check'
+  // The fallback message was originally '[object Object]' due to a bug, and is kept for backwards compatibility.
+  if (!message) message = isString(cbOrMessage) && !isEmptyString(cbOrMessage) ? cbOrMessage : '[object Object]'
   if (bool) return
   const err = new ParameterError(message)
   if (cb) cb(err)

@@ -1,4 +1,5 @@
-import {Callback, Cookie, CookieJar, MemoryCookieStore, Store} from "../cookie";
+import type { Callback } from "../utils";
+import {Cookie, CookieJar, MemoryCookieStore, Store} from "../cookie";
 import spyOn = jest.spyOn;
 import SpyInstance = jest.SpyInstance;
 

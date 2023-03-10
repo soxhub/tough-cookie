@@ -1454,13 +1454,13 @@ export class CookieJar {
       };
     }
 
-    function withCookie(err: Error | undefined, oldCookie: Cookie | undefined | null): void {
+    function withCookie(err?: Error | null, oldCookie?: Cookie | null): void {
       if (err) {
         cb(err);
         return
       }
 
-      const next = function (err: Error | undefined): void {
+      const next = function (err?: Error | null): void {
         if (err || typeof cookie === 'string') {
           cb(err);
         } else {
@@ -1796,7 +1796,7 @@ export class CookieJar {
     }
     cookies = cookies.slice(); // do not modify the original
 
-    const putNext = (err?: Error): void => {
+    const putNext = (err?: Error | null): void => {
       if (err) {
         return cb(err, undefined);
       }
@@ -1905,7 +1905,7 @@ export class CookieJar {
       let completedCount = 0;
       const removeErrors: Error[] = [];
 
-      function removeCookieCb(removeErr: Error | undefined) {
+      function removeCookieCb(removeErr?: Error | null) {
         if (removeErr) {
           removeErrors.push(removeErr);
         }

@@ -507,7 +507,7 @@ function parseCookiePair(cookiePair: string, looseMode: boolean) {
   return c;
 }
 
-function parse(str: string, options: any = {}): Cookie | undefined | null {
+function parse(str: string, options: {loose?: boolean} = {}): Cookie | undefined | null {
   if (validators.isEmptyString(str) || !validators.isString(str)) {
     return null;
   }
@@ -860,7 +860,7 @@ export class Cookie {
   lastAccessed: Date | 'Infinity' | null | undefined;
   sameSite: string | undefined;
 
-  constructor(options: any = {}) {
+  constructor(options: {creation?: Cookie['creation']} = {}) {
     const customInspectSymbol = getCustomInspectSymbol();
     if (customInspectSymbol) {
       // @ts-ignore
@@ -1166,7 +1166,7 @@ export class Cookie {
   ]
 }
 
-function getNormalizedPrefixSecurity(prefixSecurity: string) {
+function getNormalizedPrefixSecurity(prefixSecurity: string | null | undefined) {
   if (prefixSecurity != null) {
     const normalizedPrefixSecurity = prefixSecurity.toLowerCase();
     /* The three supported options */
@@ -1232,11 +1232,11 @@ export class CookieJar {
   private readonly allowSpecialUseDomain: boolean;
   readonly prefixSecurity: string;
 
-  constructor(store?: any, options: any = { rejectPublicSuffixes: true }) {
+  constructor(store?: Store, options: CookieJarOptions = { rejectPublicSuffixes: true }) {
     if (typeof options === "boolean") {
       options = { rejectPublicSuffixes: options };
     }
-    validators.validate(validators.isObject(options), options);
+    validators.validate(validators.isObject(options), toString(options));
     this.rejectPublicSuffixes = options.rejectPublicSuffixes;
     this.enableLooseMode = !!options.looseMode;
     this.allowSpecialUseDomain =
@@ -1502,12 +1502,10 @@ export class CookieJar {
   }
 
   // RFC6365 S5.4
+  getCookies(url: string, options?: GetCookiesOptions): Promise<Cookie[]>
   getCookies(url: string, callback: Callback<Cookie[]>): void;
-  getCookies(url: string, options: any, callback: Callback<Cookie[]>): void
-  getCookies(url: string): Promise<Cookie[]>
-  getCookies(url: string, options: any): Promise<Cookie[]>
-  getCookies(url: string, options: any, callback?: (error: Error, result: Cookie[]) => void): unknown;
-  getCookies(url: string, options: any = {}, _callback?: (error: Error, result: Cookie[]) => void): unknown {
+  getCookies(url: string, options: GetCookiesOptions, callback: Callback<Cookie[]>): void
+  getCookies(url: string, options: GetCookiesOptions | Callback<Cookie[]> = {}, _callback?: Callback<Cookie[]>): unknown {
     const promiseCallback = createPromiseCallback<Cookie[]>(arguments)
     const cb = promiseCallback.callback
 
@@ -1516,7 +1514,7 @@ export class CookieJar {
     if (validators.isFunction(options)) {
       options = {};
     }
-    validators.validate(validators.isObject(options), cb, options);
+    validators.validate(validators.isObject(options), cb, toString(options));
     validators.validate(validators.isFunction(cb), cb);
 
     const host = canonicalDomain(context.hostname);
@@ -1631,7 +1629,7 @@ export class CookieJar {
         cookies = cookies.filter(matchingCookie);
 
         // sorting of S5.4 part 2
-        if (options.sort !== false) {
+        if ('sort' in options && options.sort !== false) {
           cookies = cookies.sort(cookieCompare);
         }
 
@@ -1660,10 +1658,10 @@ export class CookieJar {
   getCookieString(url: string, options: any = {}, _callback?: (error: Error, result: string) => void): unknown {
     const promiseCallback = createPromiseCallback<string>(arguments)
 
-    const next = function(err: Error, cookies: Cookie[]) {
+    const next: Callback<Cookie[]> = function(err, cookies) {
       if (err) {
         promiseCallback.callback(err);
-      } else {
+      } else if (cookies) {
         promiseCallback.callback(
           null,
           cookies
@@ -1689,10 +1687,10 @@ export class CookieJar {
   getSetCookieStrings (url: string, options: any = {}, _callback?: Callback<string[]>): unknown {
     const promiseCallback = createPromiseCallback<string[]>(arguments)
 
-    const next = function(err: Error, cookies: Cookie[]) {
+    const next: Callback<Cookie[]> = function(err, cookies) {
       if (err) {
         promiseCallback.callback(err);
-      } else {
+      } else if (cookies) {
         promiseCallback.callback(
           null,
           cookies.map(c => {
@@ -2017,6 +2015,24 @@ export {
   canonicalDomain,
   PrefixSecurityEnum,
   ParameterError
+}
+
+
+type CookieJarOptions = {
+  rejectPublicSuffixes: boolean
+  looseMode?: boolean
+  allowSpecialUseDomain?: boolean
+  prefixSecurity?: string
+}
+
+type GetCookiesOptions = {
+  secure?: boolean;
+  sameSiteContext?: 'strict' | 'lax' | 'none';
+  http?: boolean;
+  now?: Date;
+  allPaths?: boolean;
+  expire?: boolean;
+  sort?: boolean
 }
 
 type SetCookieOptions = {

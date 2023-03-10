@@ -39,7 +39,7 @@ import * as validators from './validators'
 import VERSION from './version'
 import {permuteDomain} from "./permuteDomain"
 import {getCustomInspectSymbol} from './utilHelper'
-import type { Callback, ErrorCallback } from "./types";
+import type { Callback, ErrorCallback } from "./utils";
 
 // From RFC6265 S4.1.1
 // note that it excludes \x3B ";"

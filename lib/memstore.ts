@@ -29,7 +29,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 "use strict";
-import type {Callback} from './types';
+import type {Callback} from './utils';
 import {Cookie, createPromiseCallback, pathMatch, permuteDomain} from "./cookie";
 import {Store} from './store'
 import {getCustomInspectSymbol, getUtilInspect} from './utilHelper'

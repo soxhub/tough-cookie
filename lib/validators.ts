@@ -27,7 +27,7 @@ SOFTWARE.
 ************************************************************************************ */
 "use strict";
 
-import type { ErrorCallback } from "./types";
+import type { ErrorCallback } from "./utils";
 
 const _toString = Object.prototype.toString
 /** Converts to a string using `Object.prototype.toString`. */

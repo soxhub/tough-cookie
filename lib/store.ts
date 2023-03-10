@@ -32,7 +32,7 @@
 /*jshint unused:false */
 
 import type {Cookie} from "./cookie";
-import type {Callback} from "./types";
+import type {Callback} from "./utils";
 
 export class Store {
   synchronous: boolean;

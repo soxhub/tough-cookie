@@ -73,7 +73,7 @@ const MONTH_TO_NUM = {
   oct: 9,
   nov: 10,
   dec: 11
-};
+} as const;
 
 const MAX_TIME = 2147483647000; // 31-bit max
 const MIN_TIME = 0; // 31-bit min

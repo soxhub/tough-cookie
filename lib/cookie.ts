@@ -1275,7 +1275,7 @@ export class CookieJar {
     const promiseCallback = createPromiseCallback<Cookie>(arguments)
     const cb = promiseCallback.callback
 
-    validators.validate(validators.isNonEmptyString(url), callback, options);
+    validators.validate(validators.isNonEmptyString(url), callback, toString(options));
     let err;
 
     if (validators.isFunction(url)) {

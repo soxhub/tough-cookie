@@ -2052,12 +2052,12 @@ export interface SerializedCookieJar {
   version: string;
   storeType: string | null;
   rejectPublicSuffixes: boolean;
-  [key: string]: any;
+  [key: string]: unknown;
   cookies: SerializedCookie[];
 }
 
 export interface SerializedCookie {
   key?: string;
   value?: string;
-  [key: string]: any;
+  [key: string]: unknown;
 }

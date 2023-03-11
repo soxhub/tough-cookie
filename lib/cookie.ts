@@ -1786,12 +1786,11 @@ export class CookieJar {
   }
 
   // use the class method CookieJar.deserialize instead of calling this directly
-  _importCookies(serialized: { cookies: any; }, cb: Callback<CookieJar>) {
-    let cookies = serialized.cookies;
-    if (!cookies || !Array.isArray(cookies)) {
+  _importCookies(serialized: { cookies?: unknown[]; }, cb: Callback<CookieJar>) {
+    if (!serialized.cookies || !Array.isArray(serialized.cookies)) {
       return cb(new Error("serialized jar has no cookies array"), undefined);
     }
-    cookies = cookies.slice(); // do not modify the original
+    const cookies = serialized.cookies.slice(); // do not modify the original
 
     const putNext = (err?: Error | null): void => {
       if (err) {

@@ -1,4 +1,5 @@
 {
+  "version": "200.5.1",
   "author": {
     "name": "Jeremy Stashewsky",
     "email": "jstash@gmail.com",
@@ -43,7 +44,6 @@
     "RFC6265",
     "RFC2965"
   ],
-  "version": "2.5.1",
   "homepage": "https://github.com/salesforce/tough-cookie",
   "repository": {
     "type": "git",
